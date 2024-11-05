@@ -23,6 +23,7 @@
             </ul>
         </nav>
     </header>
+    
     <main>
         <section id="mision">
             <h2>Misión</h2>
@@ -151,9 +152,142 @@
                 <li>Proveedores</li>
             </ul>
             <h3>Organigrama</h3>
-            <p>Gerente (Dueño) > Empleados (Cajeros, Personal de Almacén)</p>
+            <div class="organigrama">
+                <ul>
+                    <li>
+                        <div>Jefe o Gerente</div>
+                        <ul>
+                            <li><div>Vendedores</div></li>
+                            <li><div>Cajeros</div></li>
+                            <li><div>Personal de Almacén</div></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
         </section>
+
+        <section id="modelo-verbal">
+            <h2>Modelo Verbal de un Proceso de Compra</h2>
+            <p>El cliente se desplaza hacia San Cristóbal, en el parque principal. Entra al supermercado, a simple vista se encuentran algunos carteles que resaltan cada sección para saber en donde se encuentra el producto que desean. Pueden dirigirse a diferentes secciones, como frutas, lácteos, carnes, etc. Algunos agarran carritos, aunque hay otros que simplemente llevan 1-2 productos y los agarran manualmente.</p>
+
+            <p>Cuando el cliente se dirige a la caja para pagar, el proceso de escaneo de productos es propenso a errores. Algunos códigos de barras están dañados o mal registrados en el sistema, lo que ocasiona que ciertos productos no se escaneen correctamente. Esto ralentiza el proceso, ya que el cajero tiene que ingresar manualmente los códigos o buscar el producto en el sistema, lo que genera largas esperas, especialmente en horas pico.</p>
+
+            <p>Después de que el cliente recibe la factura, puede elegir si ir por otro producto para comprar o marcharse del local.</p>
+
+            <p>Mientras tanto, en el área de almacén, el personal está trabajando para recibir nuevos productos de los proveedores. Verifican que la mercancía coincida con los pedidos y la organizan cuidadosamente en el almacén. Esto asegura que siempre haya stock disponible para los clientes.</p>
+
+            <p>El gerente del supermercado supervisa todas las operaciones. Se asegura de que los empleados estén bien capacitados. Además, analiza los informes de ventas y trabaja en estrategias para mejorar la satisfacción del cliente y maximizar el éxito del negocio. Al final del día, el supermercado ha logrado cumplir su misión: brindar un servicio de calidad, una experiencia de compra agradable y un stock bien gestionado.</p>
+        </section>
+        <section id="modelo-verbal">
+            <h2>Modelo Verbal de la solución</h2>
+            <p>El cliente se desplaza hacia San Cristóbal, en el parque principal, y entra al supermercado. Ya dentro, los carteles de las secciones guían a los clientes hacia los productos que buscan, ya sea en frutas, lácteos, carnes, etc. Algunos clientes toman un carrito, mientras que otros prefieren llevar pocos productos a mano.</p>
+            
+            <p>Cuando se dirigen a la caja, ponen sus productos en la vitrina y aquí Dolibarr ERP/CRM entra en acción. El sistema de punto de venta (POS) está integrado con un lector de códigos de barras para escanear los productos. Gracias a su módulo de gestión de inventario, Dolibarr asegura que los códigos de los productos estén correctamente registrados y actualizados.</p>
+            
+            <p>Si un código de barra está dañado o no se lee correctamente, el cajero puede buscar rápidamente el producto en el sistema mediante la búsqueda manual o introduciendo un código alternativo.</p>
+            
+            <p>El cliente coloca los productos y el cajero los escanea. Si uno de los productos tiene el código de barras dañado, el cajero realiza la corrección manual. Solucionado el problema, el cajero genera la factura para el cliente, quien decide el método de pago.</p>
+
+            <p>Una vez que el cliente recibe su factura, puede elegir si regresar por otro producto o marcharse.</p>
+
+            <p>Mientras tanto, en el almacén, el personal utiliza Dolibarr para gestionar la recepción de nuevos productos. Cuando un proveedor entrega mercancía, se registran los productos en el sistema, verificando que coincidan con los pedidos. El módulo de gestión de inventario facilita la organización y asegura que siempre haya productos disponibles para reponer en las estanterías.</p>
+        </section>
+
+       
     </main>
+
+        <h4>Reglas de Negocio del Supermercado</h4>
+        <table class="rules-table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Fórmula</th>
+                    <th>Fuente</th>
+                    <th>Reglas Relacionadas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>R001</td>
+                    <td>Reabastecimiento</td>
+                    <td>Se activa una orden de compra automática cuando el stock de un producto cae por debajo de un mínimo establecido.</td>
+                    <td>if stock_producto &lt; stock_min → generar orden de compra</td>
+                    <td>Acuerdo con proveedores</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>R002</td>
+                    <td>Política de Devoluciones</td>
+                    <td>Los productos defectuosos pueden devolverse en un plazo de 30 días presentando la factura.</td>
+                    <td>if producto_defectuoso &amp; dias_compra &lt;= 30 → permite devolución</td>
+                    <td>Política de atención al cliente</td>
+                    <td>R004 (Facturación correcta)</td>
+                </tr>
+                <tr>
+                    <td>R003</td>
+                    <td>Productos Pronto a Vencerse</td>
+                    <td>Si los productos están prontos a vencerse (7 días), se aplica un descuento del 50% a esos productos.</td>
+                    <td>if fecha_producto_venc - fecha_actual &lt;= 7 → precio_producto = precio_producto * 0.5</td>
+                    <td>Política personal evitar pérdidas</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>R004</td>
+                    <td>Facturación Correcta</td>
+                    <td>Verifica que todos los productos pasen por el escáner y se registren correctamente antes de generar la factura.</td>
+                    <td>if productos_escaneados = productos_comprados → generar factura</td>
+                    <td>Gestión de cajas</td>
+                    <td>R002 (Política de devoluciones)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class ="rules-table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Alias</th>
+                    <th>Cómo/Dónde</th>
+                    <th>Características a almacenar/Componentes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Cliente</td>
+                    <td>cliente</td>
+                    <td>En el supermercado o interactuando en línea</td>
+                    <td>ID cliente, nombre, dirección, teléfono, email, historial de compras</td>
+                </tr>
+                <tr>
+                    <td>Producto</td>
+                    <td>producto</td>
+                    <td>Estante físico del supermercado o catálogo digital</td>
+                    <td>ID producto, nombre, descripción, categoría (frutas, lácteos, carnes), precio, fecha de vencimiento, stock actual</td>
+                </tr>
+                <tr>
+                    <td>Proveedor</td>
+                    <td>proveedor</td>
+                    <td>Sistema de gestión de proveedores</td>
+                    <td>ID proveedor, nombre, dirección, productos que suministra, condiciones de pago, acuerdos comerciales, entregas recientes</td>
+                </tr>
+                <tr>
+                    <td>Factura</td>
+                    <td>factura</td>
+                    <td>Generada al completar la compra</td>
+                    <td>ID factura, fecha de compra, productos comprados, cantidades, precios, total a pagar, método de pago, ID cajero</td>
+                </tr>
+                <tr>
+                    <td>Cajero</td>
+                    <td>cajero</td>
+                    <td>Personal de caja en el supermercado</td>
+                    <td>ID cajero, nombre, turno de trabajo, facturas generadas, monto total cobrado, operaciones realizadas, descuentos aplicados</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+    
     <footer>
         <p>&copy; 2024 Supermercado - Todos los derechos reservados.</p>
     </footer>
